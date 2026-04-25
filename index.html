@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Rekapan Kehadiran Semester 2 - Sakit, Izin, Alpa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 28px 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            padding: 0 0 20px 0;
+        }
+        h1 {
+            margin: 0;
+            padding: 28px 28px 16px 28px;
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: white;
+            letter-spacing: -0.3px;
+            border-bottom: 1px solid #e9eef3;
+        }
+        .table-wrapper {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: auto;
+            margin-top: 0px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 680px;
+        }
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #f4f9fe;
+            color: #1e4a76;
+            font-weight: 700;
+            padding: 16px 12px;
+            border-bottom: 2px solid #d4e2ec;
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 10;
+            box-shadow: 0 2px 2px -1px rgba(0,0,0,0.05);
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e9f0f5;
+            text-align: center;
+            vertical-align: middle;
+        }
+        td:first-child, th:first-child {
+            padding-left: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        td:nth-child(2) {
+            text-align: left;
+            font-weight: 500;
+            color: #0c4a6e;
+            background-color: #fefefe;
+        }
+        tr:hover td {
+            background-color: #fafdff;
+        }
+        .number-cell {
+            font-family: 'Courier New', 'SF Mono', monospace;
+            font-weight: 700;
+        }
+        .sakit { color: #2b6e2b; }
+        .izin { color: #b85c00; }
+        .alpa { color: #b91c1c; }
+        .search-bar {
+            padding: 16px 28px 12px 28px;
+            display: flex;
+            justify-content: flex-end;
+            background: white;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .search-bar input {
+            padding: 8px 14px;
+            border-radius: 32px;
+            border: 1px solid #cbdde6;
+            font-size: 0.8rem;
+            width: 260px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: #7f9fbb;
+            box-shadow: 0 0 0 2px rgba(31, 100, 140, 0.1);
+        }
+        @media (max-width: 700px) {
+            body { padding: 16px 12px; }
+            h1 { font-size: 1.4rem; padding: 20px 20px 12px 20px; }
+            td, th { padding: 8px 6px; font-size: 0.78rem; }
+            td:first-child, th:first-child { padding-left: 8px; }
+            .search-bar { padding: 12px 16px; }
+            .search-bar input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        📋 Rekapan Kehadiran Semester 2
+    </h1>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="🔍 Cari nama siswa ...">
+    </div>
+
+    <div class="table-wrapper">
+        <table id="attendanceTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Siswa/i</th>
+                    <th>Sakit</th>
+                    <th>Izin</th>
+                    <th>Alpa</th>
+                </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- data diisi javascript -->
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Data dari file Excel (nilai SEKAT diubah menjadi SAKIT sesuai permintaan)
+    // Angka pada kolom "Sakit" diambil dari data "Sekat" sebelumnya
+    const studentsData = [
+        { no:1, nama:"ALDRIAN RONALSON TITIHERU", sakit:0, izin:2, alpa:0 },
+        { no:2, nama:"Alfian Adi Purnomo", sakit:0, izin:0, alpa:3 },
+        { no:3, nama:"Aprilia Elisabet Yesnat", sakit:1, izin:0, alpa:17 },
+        { no:4, nama:"Bryan Edward Julyanto Bukari", sakit:1, izin:0, alpa:6 },
+        { no:5, nama:"Cici Deswita Febriani", sakit:4, izin:0, alpa:6 },
+        { no:6, nama:"CINTA LAURA HURULEA", sakit:0, izin:0, alpa:1 },
+        { no:7, nama:"DANIYATI", sakit:1, izin:0, alpa:0 },
+        { no:8, nama:"Deby Debora Kemesrar", sakit:0, izin:0, alpa:14 },
+        { no:9, nama:"DELVERO EDWADT KALAMI", sakit:2, izin:0, alpa:7 },
+        { no:10, nama:"ELDA W. KAMESFLE", sakit:0, izin:0, alpa:6 },
+        { no:11, nama:"FALEN PRATAMA AYGE", sakit:2, izin:1, alpa:0 },
+        { no:12, nama:"Falensia Marissa Runtu", sakit:0, izin:0, alpa:0 },
+        { no:13, nama:"HARRY PANCA POLSIARY", sakit:0, izin:1, alpa:0 },
+        { no:14, nama:"Herman Gabriel Fonataba", sakit:0, izin:1, alpa:0 },
+        { no:15, nama:"Jessie Melissa Cantika Latue", sakit:1, izin:0, alpa:4 },
+        { no:16, nama:"JUEN FRIDA LEKAHENA", sakit:0, izin:0, alpa:1 },
+        { no:17, nama:"JUNIOR PASKAL TAHITU", sakit:1, izin:0, alpa:3 },
+        { no:18, nama:"KIKI KHUSNUL OKTAVIANTI", sakit:0, izin:2, alpa:2 },
+        { no:19, nama:"MARIA F. LEWATAKA", sakit:2, izin:0, alpa:0 },
+        { no:20, nama:"MARIA MAGDALENA SNANFI", sakit:0, izin:0, alpa:11 },
+        { no:21, nama:"Maya Rosaida Paa", sakit:3, izin:0, alpa:3 },
+        { no:22, nama:"MELANI STEFANNY LOIWATU", sakit:1, izin:0, alpa:0 },
+        { no:23, nama:"MUHAMMAD FADLAN", sakit:0, izin:0, alpa:4 },
+        { no:24, nama:"NAOMI TRESIA PAITEI", sakit:0, izin:0, alpa:1 },
+        { no:25, nama:"NATHALIA RUMBINO", sakit:3, izin:1, alpa:5 },
+        { no:26, nama:"Novela Jessica Ta'bilangi", sakit:1, izin:2, alpa:1 },
+        { no:27, nama:"OLGA LIKLIKWATIL", sakit:1, izin:1, alpa:2 },
+        { no:28, nama:"RACHEL MANUELLA MAYOR", sakit:0, izin:0, alpa:4 },
+        { no:29, nama:"Raimond E. Soselisa", sakit:3, izin:0, alpa:11 },
+        { no:30, nama:"RATNA SARI ABDULMUIN", sakit:1, izin:0, alpa:4 },
+        { no:31, nama:"Rizky", sakit:0, izin:0, alpa:4 },
+        { no:32, nama:"SAMUEL.FANIK.TEHUPEIORY", sakit:0, izin:0, alpa:6 },
+        { no:33, nama:"Tiara Arung Silambi", sakit:0, izin:0, alpa:1 },
+        { no:34, nama:"WULAN RAHMADANI", sakit:1, izin:1, alpa:1 },
+        { no:35, nama:"ZAINU", sakit:0, izin:1, alpa:5 }
+    ];
+
+    function renderTable(filteredData = null) {
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) return;
+        const dataToRender = filteredData !== null ? filteredData : studentsData;
+        tbody.innerHTML = '';
+        dataToRender.forEach(s => {
+            const row = tbody.insertRow();
+            const cellNo = row.insertCell(0);
+            cellNo.textContent = s.no;
+            cellNo.style.fontWeight = '500';
+            const cellName = row.insertCell(1);
+            cellName.textContent = s.nama;
+            const cellSakit = row.insertCell(2);
+            cellSakit.textContent = s.sakit;
+            cellSakit.className = 'number-cell sakit';
+            const cellIzin = row.insertCell(3);
+            cellIzin.textContent = s.izin;
+            cellIzin.className = 'number-cell izin';
+            const cellAlpa = row.insertCell(4);
+            cellAlpa.textContent = s.alpa;
+            cellAlpa.className = 'number-cell alpa';
+        });
+    }
+
+    function filterTableByName() {
+        const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (keyword === '') {
+            renderTable();
+        } else {
+            const filtered = studentsData.filter(s => s.nama.toLowerCase().includes(keyword));
+            renderTable(filtered);
+        }
+    }
+
+    renderTable();
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTableByName);
+    }
+</script>
+</body>
+</html>
