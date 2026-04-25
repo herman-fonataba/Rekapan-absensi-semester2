@@ -23,15 +23,15 @@
             color: #1a2c3e;
             display: flex;
             flex-direction: column;
-            padding: 12px;
+            padding: 8px;
         }
 
-        /* container utama memenuhi area */
+        /* container utama */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 28px;
+            border-radius: 24px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
@@ -39,20 +39,20 @@
             overflow: hidden;
         }
 
-        /* HEADER — tetap di atas */
+        /* HEADER */
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            padding: 20px 20px 12px 20px;
+            padding: 16px 16px 10px 16px;
             margin: 0;
             background: white;
             border-bottom: 1px solid #e9edf2;
             flex-shrink: 0;
         }
 
-        /* search bar — tetap di atas */
+        /* search bar */
         .search-bar {
-            padding: 12px 16px;
+            padding: 10px 12px;
             background: white;
             border-bottom: 1px solid #eef2f6;
             flex-shrink: 0;
@@ -60,8 +60,8 @@
 
         .search-bar input {
             width: 100%;
-            padding: 12px 16px;
-            font-size: 1rem;
+            padding: 10px 14px;
+            font-size: 0.9rem;
             border: 1px solid #cddfe8;
             border-radius: 44px;
             background: #ffffff;
@@ -75,34 +75,50 @@
             box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
         }
 
+        /* indikator geser untuk HP */
+        .swipe-indicator {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #f5a623;
+            background: #fff8e7;
+            padding: 6px 12px;
+            border-bottom: 1px solid #ffe0b3;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .swipe-indicator span {
+            font-size: 1rem;
+        }
+
         /* HANYA TABEL WRAPPER YANG BISA SCROLL (VERTIKAL & HORIZONTAL) */
         .table-wrapper {
             flex: 1;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
             background: white;
             scroll-behavior: smooth;
         }
 
-        /* TABEL */
+        /* TABEL - lebar cukup untuk menampung semua kolom di HP dengan nyaman */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
-            min-width: 600px;
+            font-size: 0.8rem;
+            min-width: 550px;
         }
 
-        /* Sticky header - saat scroll vertikal, header tetap terlihat */
+        /* Sticky header */
         thead th {
             position: sticky;
             top: 0;
             background: #f2f6fc;
             color: #1a4d6b;
             font-weight: 700;
-            padding: 14px 8px;
-            font-size: 0.85rem;
+            padding: 12px 6px;
+            font-size: 0.8rem;
             text-align: center;
             border-bottom: 2px solid #dce5ec;
             z-index: 12;
@@ -110,15 +126,15 @@
         }
 
         td {
-            padding: 12px 8px;
+            padding: 10px 6px;
             border-bottom: 1px solid #ecf3f8;
             text-align: center;
             vertical-align: middle;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: background-color 0.2s ease;
         }
 
-        /* Kolom NAMA rata kiri */
+        /* Kolom NAMA rata kiri - bisa diklik */
         td:nth-child(2) {
             text-align: left;
             font-weight: 500;
@@ -126,19 +142,16 @@
             background-color: #fefefe;
             word-break: break-word;
             white-space: normal;
-            min-width: 160px;
+            min-width: 140px;
             cursor: pointer;
-            position: relative;
         }
 
-        /* Efek hover pada nama untuk memberi petunjuk bisa diklik */
         td:nth-child(2):hover {
             background-color: #e6f0fa !important;
             text-decoration: underline;
-            text-underline-offset: 2px;
         }
 
-        /* kelas untuk baris yang sedang dipilih (klik nama) */
+        /* kelas untuk baris yang dipilih */
         .row-selected td {
             background-color: #fff2db !important;
             border-left: 3px solid #f5a623;
@@ -151,74 +164,103 @@
         }
 
         td:first-child, th:first-child {
-            padding-left: 12px;
-            padding-right: 8px;
+            padding-left: 10px;
             text-align: center;
             font-weight: 500;
             white-space: nowrap;
         }
 
-        /* Gaya angka */
+        /* Gaya angka Sakit, Izin, Alpa - jelas dan warna berbeda */
         .number-cell {
             font-family: 'SF Mono', 'Courier New', monospace;
             font-weight: 700;
             font-size: 0.9rem;
         }
-        .sakit { color: #2b6e2b; }
-        .izin { color: #e68a2e; font-weight: 700; }
-        .alpa { color: #c72a2a; font-weight: 700; }
+        .sakit { 
+            color: #2b6e2b; 
+            background-color: #f0f9f0;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 32px;
+            padding: 2px 4px;
+        }
+        .izin { 
+            color: #e68a2e; 
+            font-weight: 700;
+            background-color: #fff4e6;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 32px;
+            padding: 2px 4px;
+        }
+        .alpa { 
+            color: #c72a2a; 
+            font-weight: 700;
+            background-color: #ffe6e6;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 32px;
+            padding: 2px 4px;
+        }
 
-        /* Hover baris biasa */
+        /* agar sel angka lebih rapi */
+        td:nth-child(3), td:nth-child(4), td:nth-child(5) {
+            text-align: center;
+        }
+
         tr:hover td {
             background-color: #fafdff;
         }
 
-        /* footer kecil */
+        /* footer */
         .bottom-note {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #8ba3bc;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-top: 1px solid #eef2f6;
             background: #ffffff;
             flex-shrink: 0;
         }
 
-        /* ====== RESPONSIVE HP ====== */
+        /* HP khusus - tampilan lebih nyaman */
         @media (max-width: 640px) {
             body {
-                padding: 8px;
+                padding: 6px;
             }
             h1 {
-                font-size: 1.35rem;
-                padding: 14px 16px 8px 16px;
-            }
-            .search-bar {
-                padding: 8px 12px;
+                font-size: 1.2rem;
+                padding: 12px 14px 8px 14px;
             }
             .search-bar input {
-                padding: 10px 14px;
-                font-size: 0.9rem;
+                padding: 8px 12px;
+                font-size: 0.85rem;
             }
             thead th {
-                padding: 10px 5px;
-                font-size: 0.75rem;
+                padding: 8px 4px;
+                font-size: 0.7rem;
             }
             td {
-                padding: 10px 5px;
-                font-size: 0.78rem;
+                padding: 8px 4px;
+                font-size: 0.72rem;
             }
             td:nth-child(2) {
-                min-width: 130px;
+                min-width: 120px;
+                font-size: 0.75rem;
             }
             .number-cell {
-                font-size: 0.82rem;
+                font-size: 0.8rem;
+            }
+            .swipe-indicator {
+                font-size: 0.65rem;
+                padding: 4px 8px;
             }
         }
 
+        /* Laptop & desktop lebih lega */
         @media (min-width: 1024px) {
-            .container {
-                margin: 16px auto;
+            body {
+                padding: 20px;
             }
             h1 {
                 font-size: 1.9rem;
@@ -229,16 +271,10 @@
             }
             .search-bar input {
                 width: 340px;
-                font-size: 0.9rem;
             }
             td, th {
                 padding: 14px 12px;
             }
-        }
-
-        /* Hilangkan outline berlebih */
-        :focus {
-            outline: none;
         }
     </style>
 </head>
@@ -248,11 +284,16 @@
         📋 Rekapan Kehadiran Semester 2
     </h1>
 
+    <!-- indikator untuk HP: beri tahu bisa digeser -->
+    <div class="swipe-indicator">
+        <span>👉</span> Geser tabel ke kanan/kiri untuk lihat Sakit, Izin, Alpa <span>👈</span>
+    </div>
+
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="🔍 Cari nama siswa ..." aria-label="Cari nama siswa">
     </div>
 
-    <!-- HANYA AREA INI YANG BISA DISCROLL (VERTIKAL & HORIZONTAL) -->
+    <!-- HANYA AREA INI YANG BISA DISCROLL -->
     <div class="table-wrapper" id="tableWrapper">
         <table id="attendanceTable">
             <thead>
@@ -270,12 +311,12 @@
         </table>
     </div>
     <div class="bottom-note">
-        ↕️ Geser tabel (horizontal/vertikal) • Klik nama siswa untuk memberi tanda warna
+        ↕️ Geser vertikal • Klik nama untuk memberi tanda
     </div>
 </div>
 
 <script>
-    // Data dari file excel (kolom Sakit = sebelumnya Sekat)
+    // Data (Sakit diambil dari kolom Sekat sebelumnya)
     const studentsData = [
         { no:1, nama:"ALDRIAN RONALSON TITIHERU", sakit:0, izin:2, alpa:0 },
         { no:2, nama:"Alfian Adi Purnomo", sakit:0, izin:0, alpa:3 },
@@ -316,48 +357,36 @@
 
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
-    let currentSelectedRow = null;  // menyimpan baris yang sedang dipilih
+    let currentSelectedRow = null;
 
-    // Fungsi untuk menghapus highlight dari semua baris
     function clearHighlight() {
         if (currentSelectedRow) {
             currentSelectedRow.classList.remove('row-selected');
             currentSelectedRow = null;
         }
-        // alternatif: hapus class dari semua baris jika ada (tapi lebih aman pakai variabel)
         const allRows = document.querySelectorAll('#attendanceTable tbody tr');
-        allRows.forEach(row => {
-            row.classList.remove('row-selected');
-        });
+        allRows.forEach(row => row.classList.remove('row-selected'));
         currentSelectedRow = null;
     }
 
-    // Fungsi untuk memberi highlight pada baris tertentu
     function highlightRow(rowElement) {
-        clearHighlight();          // hapus highlight sebelumnya
+        clearHighlight();
         if (rowElement) {
             rowElement.classList.add('row-selected');
             currentSelectedRow = rowElement;
         }
     }
 
-    // Event listener untuk klik pada kolom NAMA (kolom ke-2 index 1)
-    // Menggunakan event delegation karena baris bisa berubah (filter/search)
     function attachRowClickHandler() {
         const table = document.getElementById('attendanceTable');
         if (!table) return;
-        
-        // Hapus listener lama jika ada, pasang baru (pakai event delegation)
         table.removeEventListener('click', tableClickHandler);
         table.addEventListener('click', tableClickHandler);
     }
 
     function tableClickHandler(event) {
-        // Cari elemen td yang diklik, pastikan itu kolom NAMA (kolom ke-2 / index 1)
         let target = event.target;
         let targetCell = null;
-        
-        // Cari apakah yang diklik adalah td atau turunannya
         while (target && target !== this) {
             if (target.tagName === 'TD') {
                 targetCell = target;
@@ -365,18 +394,14 @@
             }
             target = target.parentElement;
         }
-        
         if (!targetCell) return;
-        
-        // Ambil indeks kolom dari cell yang diklik
-        const cellIndex = targetCell.cellIndex; // 0: No, 1: Nama, 2: Sakit, 3: Izin, 4: Alpa
-        if (cellIndex === 1) {  // Hanya jika yang diklik adalah kolom NAMA
-            const row = targetCell.parentElement; // <tr>
+        const cellIndex = targetCell.cellIndex;
+        if (cellIndex === 1) {
+            const row = targetCell.parentElement;
             highlightRow(row);
         }
     }
 
-    // Render tabel (dengan atau tanpa filter)
     function renderTable(filteredArray = null) {
         if (!tbody) return;
         const dataSource = filteredArray !== null ? filteredArray : studentsData;
@@ -386,71 +411,44 @@
             const s = dataSource[i];
             const row = tbody.insertRow();
             
-            // No
             const cellNo = row.insertCell(0);
             cellNo.textContent = s.no;
             cellNo.style.fontWeight = '500';
             
-            // Nama
             const cellName = row.insertCell(1);
             cellName.textContent = s.nama;
             
-            // Sakit
             const cellSakit = row.insertCell(2);
-            cellSakit.textContent = s.sakit;
-            cellSakit.className = 'number-cell sakit';
+            cellSakit.innerHTML = `<span class="number-cell sakit">${s.sakit}</span>`;
             
-            // Izin
             const cellIzin = row.insertCell(3);
-            cellIzin.textContent = s.izin;
-            cellIzin.className = 'number-cell izin';
+            cellIzin.innerHTML = `<span class="number-cell izin">${s.izin}</span>`;
             
-            // Alpa
             const cellAlpa = row.insertCell(4);
-            cellAlpa.textContent = s.alpa;
-            cellAlpa.className = 'number-cell alpa';
+            cellAlpa.innerHTML = `<span class="number-cell alpa">${s.alpa}</span>`;
         }
         
-        // Setelah render ulang, highlight harus di-reset (karena DOM baru)
         currentSelectedRow = null;
-        // Pasang ulang event listener (meskipun sudah terpasang, pastikan tetap bekerja)
         attachRowClickHandler();
     }
 
-    // Filter nama (dengan mempertahankan perilaku)
     function handleFilter() {
         const keyword = searchInput.value.trim().toLowerCase();
         if (keyword === "") {
             renderTable();
-            return;
+        } else {
+            const filtered = studentsData.filter(s => s.nama.toLowerCase().includes(keyword));
+            renderTable(filtered);
         }
-        const filtered = studentsData.filter(s => s.nama.toLowerCase().includes(keyword));
-        renderTable(filtered);
-        // setelah filter, hilangkan highlight karena data berubah
         clearHighlight();
     }
-    
-    // Saat pencarian selesai, pastikan highlight dihapus
+
     if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            handleFilter();
-            clearHighlight();  // ekstra aman
-        });
-        searchInput.addEventListener('search', () => {
-            handleFilter();
-            clearHighlight();
-        });
+        searchInput.addEventListener('input', handleFilter);
+        searchInput.addEventListener('search', handleFilter);
     }
 
-    // Inisialisasi awal
     renderTable();
-    
-    // Tambahkan instruksi: pada HP atau desktop, geser tabel bebas
-    // Pastikan wrapper bisa discroll dengan baik
-    const tableWrapper = document.getElementById('tableWrapper');
-    if (tableWrapper) {
-        // tidak perlu modifikasi lebih lanjut, overflow auto sudah berfungsi
-    }
 </script>
 </body>
 </html>
