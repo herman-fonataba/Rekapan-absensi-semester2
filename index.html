@@ -11,28 +11,40 @@
             padding: 0;
         }
 
+        /* 
+            ** KONSEP: body TIDAK BISA SCROLL ** 
+            - height: 100vh, overflow: hidden
+            - semua konten utama diatur dengan height 100% 
+            - hanya .table-wrapper yang bisa scroll (vertical + horizontal)
+        */
+        html, body {
+            height: 100%;
+            overflow: hidden;  /* mencegah scroll pada body/halaman utama */
+        }
+
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', sans-serif;
             background: #eef2f7;
-            margin: 0;
-            padding: 16px 12px;
             color: #1a2c3e;
-            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
         }
 
-        /* container utama */
+        /* container utama memenuhi seluruh area yang tersedia, tidak overflow */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 28px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            height: 100%;          /* mengisi penuh body */
+            overflow: hidden;      /* biar container tidak scroll, scroll hanya di tabel wrapper */
         }
 
-        /* HEADER */
+        /* HEADER — tidak ikut scroll */
         h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -41,17 +53,15 @@
             background: white;
             border-bottom: 1px solid #e9edf2;
             letter-spacing: -0.2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-shrink: 0;       /* agar tidak mengecil saat konten penuh */
         }
 
-        /* search bar - mobile friendly */
+        /* search bar — tetap di atas, tidak ikut scroll */
         .search-bar {
             padding: 12px 16px;
             background: white;
             border-bottom: 1px solid #eef2f6;
+            flex-shrink: 0;
         }
 
         .search-bar input {
@@ -71,17 +81,22 @@
             box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
         }
 
-        /* wrapper scroll - baik untuk HP maupun desktop */
+        /* 
+            ** INI KUNCI UTAMA: HANYA TABEL WRAPPER YANG BISA SCROLL ** 
+            - overflow: auto (scroll vertical & horizontal jika diperlukan)
+            - flex: 1 => mengambil sisa ruang tanpa overflow ke body
+        */
         .table-wrapper {
-            overflow-x: auto;
-            overflow-y: auto;
-            max-height: 65vh;
+            flex: 1;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
             border-bottom-left-radius: 24px;
             border-bottom-right-radius: 24px;
+            background: white;
+            scroll-behavior: smooth;
         }
 
-        /* Tabel utama */
+        /* Tabel */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -89,7 +104,7 @@
             min-width: 600px;
         }
 
-        /* Sticky header - ikut scroll vertikal */
+        /* Sticky header - saat scroll vertikal, header tetap terlihat */
         thead th {
             position: sticky;
             top: 0;
@@ -102,6 +117,7 @@
             border-bottom: 2px solid #dce5ec;
             z-index: 12;
             white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
 
         td {
@@ -112,7 +128,7 @@
             font-size: 0.85rem;
         }
 
-        /* Kolom NAMA rata kiri + tebal sedang */
+        /* Kolom NAMA rata kiri */
         td:nth-child(2) {
             text-align: left;
             font-weight: 500;
@@ -123,15 +139,15 @@
             min-width: 160px;
         }
 
-        /* Nomor kolom pertama */
         td:first-child, th:first-child {
             padding-left: 12px;
+            padding-right: 8px;
             text-align: center;
             font-weight: 500;
             white-space: nowrap;
         }
 
-        /* Warna angka */
+        /* Gaya angka */
         .number-cell {
             font-family: 'SF Mono', 'Courier New', monospace;
             font-weight: 700;
@@ -141,39 +157,36 @@
         .izin { color: #e68a2e; font-weight: 700; }
         .alpa { color: #c72a2a; font-weight: 700; }
 
-        /* Hover row */
         tr:hover td {
             background-color: #fafdff;
         }
 
-        /* footer kosong supaya rapi */
+        /* footer kecil hanya dekorasi, tidak mengganggu scroll */
         .bottom-note {
             text-align: center;
             font-size: 0.7rem;
             color: #8ba3bc;
-            padding: 16px 12px;
+            padding: 12px 12px;
             border-top: 1px solid #eef2f6;
             background: #ffffff;
+            flex-shrink: 0;
         }
 
-        /* ========== RESPONSIVE EXTRA UNTUK HP ========== */
+        /* ====== RESPONSIVE: tetap pastikan hanya tabel yang scroll ====== */
         @media (max-width: 640px) {
             body {
-                padding: 12px 8px;
+                padding: 8px;
             }
             h1 {
                 font-size: 1.35rem;
-                padding: 16px 16px 8px 16px;
+                padding: 14px 16px 8px 16px;
             }
             .search-bar {
-                padding: 10px 12px;
+                padding: 8px 12px;
             }
             .search-bar input {
                 padding: 10px 14px;
                 font-size: 0.9rem;
-            }
-            .table-wrapper {
-                max-height: 70vh;
             }
             thead th {
                 padding: 10px 5px;
@@ -185,40 +198,35 @@
             }
             td:nth-child(2) {
                 min-width: 130px;
-                font-size: 0.78rem;
             }
             .number-cell {
                 font-size: 0.82rem;
             }
         }
 
-        /* Laptop & desktop lebih lega */
         @media (min-width: 1024px) {
             .container {
-                margin: 20px auto;
+                margin: 16px auto;
             }
             h1 {
                 font-size: 1.9rem;
-                padding: 28px 28px 12px 28px;
+                padding: 24px 28px 12px 28px;
             }
             .search-bar {
-                padding: 16px 28px;
+                padding: 12px 28px;
             }
             .search-bar input {
-                width: 320px;
+                width: 340px;
                 font-size: 0.9rem;
             }
             td, th {
                 padding: 14px 12px;
             }
-            td:nth-child(2) {
-                font-size: 0.9rem;
-            }
         }
 
-        /* sentuhan modern */
-        .emoji-icon {
-            font-size: 1.2rem;
+        /* Hilangkan focus outline yang mengganggu */
+        :focus {
+            outline: none;
         }
     </style>
 </head>
@@ -232,6 +240,7 @@
         <input type="text" id="searchInput" placeholder="🔍 Cari nama siswa ..." aria-label="Cari nama siswa">
     </div>
 
+    <!-- HANYA AREA INI YANG BISA DISCROLL (VERTIKAL & HORIZONTAL) -->
     <div class="table-wrapper">
         <table id="attendanceTable">
             <thead>
@@ -249,12 +258,12 @@
         </table>
     </div>
     <div class="bottom-note">
-        ⏳ Tabel dapat digeser horizontal • Data sesuai semester 2
+        ↕️ Geser tabel untuk melihat semua data • Semester 2
     </div>
 </div>
 
 <script>
-    // Data asli dari file excel — kolom Sakit menggantikan "Sekat"
+    // Data dari file excel (kolom Sakit = sebelumnya Sekat)
     const studentsData = [
         { no:1, nama:"ALDRIAN RONALSON TITIHERU", sakit:0, izin:2, alpa:0 },
         { no:2, nama:"Alfian Adi Purnomo", sakit:0, izin:0, alpa:3 },
@@ -296,7 +305,7 @@
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
 
-    // Fungsi render tabel (dengan filter)
+    // Render tabel (dengan atau tanpa filter)
     function renderTable(filteredArray = null) {
         if (!tbody) return;
         const dataSource = filteredArray !== null ? filteredArray : studentsData;
@@ -332,7 +341,7 @@
         }
     }
 
-    // Filter interaktif (nama saja)
+    // Filter nama
     function handleFilter() {
         const keyword = searchInput.value.trim().toLowerCase();
         if (keyword === "") {
@@ -343,7 +352,7 @@
         renderTable(filtered);
     }
 
-    // Event listener untuk pencarian (real-time)
+    // event listener pencarian
     if (searchInput) {
         searchInput.addEventListener('input', handleFilter);
         searchInput.addEventListener('search', handleFilter);
