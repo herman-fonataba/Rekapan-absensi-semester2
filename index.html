@@ -11,15 +11,10 @@
             padding: 0;
         }
 
-        /* 
-            ** KONSEP: body TIDAK BISA SCROLL ** 
-            - height: 100vh, overflow: hidden
-            - semua konten utama diatur dengan height 100% 
-            - hanya .table-wrapper yang bisa scroll (vertical + horizontal)
-        */
+        /* Body TIDAK BISA SCROLL, hanya tabel yang scroll */
         html, body {
             height: 100%;
-            overflow: hidden;  /* mencegah scroll pada body/halaman utama */
+            overflow: hidden;
         }
 
         body {
@@ -31,7 +26,7 @@
             padding: 12px;
         }
 
-        /* container utama memenuhi seluruh area yang tersedia, tidak overflow */
+        /* container utama memenuhi area */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -40,11 +35,11 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
-            height: 100%;          /* mengisi penuh body */
-            overflow: hidden;      /* biar container tidak scroll, scroll hanya di tabel wrapper */
+            height: 100%;
+            overflow: hidden;
         }
 
-        /* HEADER — tidak ikut scroll */
+        /* HEADER — tetap di atas */
         h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -52,11 +47,10 @@
             margin: 0;
             background: white;
             border-bottom: 1px solid #e9edf2;
-            letter-spacing: -0.2px;
-            flex-shrink: 0;       /* agar tidak mengecil saat konten penuh */
+            flex-shrink: 0;
         }
 
-        /* search bar — tetap di atas, tidak ikut scroll */
+        /* search bar — tetap di atas */
         .search-bar {
             padding: 12px 16px;
             background: white;
@@ -81,11 +75,7 @@
             box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
         }
 
-        /* 
-            ** INI KUNCI UTAMA: HANYA TABEL WRAPPER YANG BISA SCROLL ** 
-            - overflow: auto (scroll vertical & horizontal jika diperlukan)
-            - flex: 1 => mengambil sisa ruang tanpa overflow ke body
-        */
+        /* HANYA TABEL WRAPPER YANG BISA SCROLL (VERTIKAL & HORIZONTAL) */
         .table-wrapper {
             flex: 1;
             overflow: auto;
@@ -96,7 +86,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Tabel */
+        /* TABEL */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -117,7 +107,6 @@
             border-bottom: 2px solid #dce5ec;
             z-index: 12;
             white-space: nowrap;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
 
         td {
@@ -126,6 +115,7 @@
             text-align: center;
             vertical-align: middle;
             font-size: 0.85rem;
+            transition: background-color 0.2s ease;
         }
 
         /* Kolom NAMA rata kiri */
@@ -137,6 +127,27 @@
             word-break: break-word;
             white-space: normal;
             min-width: 160px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Efek hover pada nama untuk memberi petunjuk bisa diklik */
+        td:nth-child(2):hover {
+            background-color: #e6f0fa !important;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* kelas untuk baris yang sedang dipilih (klik nama) */
+        .row-selected td {
+            background-color: #fff2db !important;
+            border-left: 3px solid #f5a623;
+            border-right: 3px solid #f5a623;
+        }
+
+        .row-selected td:nth-child(2) {
+            background-color: #ffe6b3 !important;
+            font-weight: 700;
         }
 
         td:first-child, th:first-child {
@@ -157,22 +168,23 @@
         .izin { color: #e68a2e; font-weight: 700; }
         .alpa { color: #c72a2a; font-weight: 700; }
 
+        /* Hover baris biasa */
         tr:hover td {
             background-color: #fafdff;
         }
 
-        /* footer kecil hanya dekorasi, tidak mengganggu scroll */
+        /* footer kecil */
         .bottom-note {
             text-align: center;
             font-size: 0.7rem;
             color: #8ba3bc;
-            padding: 12px 12px;
+            padding: 10px 12px;
             border-top: 1px solid #eef2f6;
             background: #ffffff;
             flex-shrink: 0;
         }
 
-        /* ====== RESPONSIVE: tetap pastikan hanya tabel yang scroll ====== */
+        /* ====== RESPONSIVE HP ====== */
         @media (max-width: 640px) {
             body {
                 padding: 8px;
@@ -224,7 +236,7 @@
             }
         }
 
-        /* Hilangkan focus outline yang mengganggu */
+        /* Hilangkan outline berlebih */
         :focus {
             outline: none;
         }
@@ -241,7 +253,7 @@
     </div>
 
     <!-- HANYA AREA INI YANG BISA DISCROLL (VERTIKAL & HORIZONTAL) -->
-    <div class="table-wrapper">
+    <div class="table-wrapper" id="tableWrapper">
         <table id="attendanceTable">
             <thead>
                 <tr>
@@ -258,7 +270,7 @@
         </table>
     </div>
     <div class="bottom-note">
-        ↕️ Geser tabel untuk melihat semua data • Semester 2
+        ↕️ Geser tabel (horizontal/vertikal) • Klik nama siswa untuk memberi tanda warna
     </div>
 </div>
 
@@ -304,6 +316,65 @@
 
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
+    let currentSelectedRow = null;  // menyimpan baris yang sedang dipilih
+
+    // Fungsi untuk menghapus highlight dari semua baris
+    function clearHighlight() {
+        if (currentSelectedRow) {
+            currentSelectedRow.classList.remove('row-selected');
+            currentSelectedRow = null;
+        }
+        // alternatif: hapus class dari semua baris jika ada (tapi lebih aman pakai variabel)
+        const allRows = document.querySelectorAll('#attendanceTable tbody tr');
+        allRows.forEach(row => {
+            row.classList.remove('row-selected');
+        });
+        currentSelectedRow = null;
+    }
+
+    // Fungsi untuk memberi highlight pada baris tertentu
+    function highlightRow(rowElement) {
+        clearHighlight();          // hapus highlight sebelumnya
+        if (rowElement) {
+            rowElement.classList.add('row-selected');
+            currentSelectedRow = rowElement;
+        }
+    }
+
+    // Event listener untuk klik pada kolom NAMA (kolom ke-2 index 1)
+    // Menggunakan event delegation karena baris bisa berubah (filter/search)
+    function attachRowClickHandler() {
+        const table = document.getElementById('attendanceTable');
+        if (!table) return;
+        
+        // Hapus listener lama jika ada, pasang baru (pakai event delegation)
+        table.removeEventListener('click', tableClickHandler);
+        table.addEventListener('click', tableClickHandler);
+    }
+
+    function tableClickHandler(event) {
+        // Cari elemen td yang diklik, pastikan itu kolom NAMA (kolom ke-2 / index 1)
+        let target = event.target;
+        let targetCell = null;
+        
+        // Cari apakah yang diklik adalah td atau turunannya
+        while (target && target !== this) {
+            if (target.tagName === 'TD') {
+                targetCell = target;
+                break;
+            }
+            target = target.parentElement;
+        }
+        
+        if (!targetCell) return;
+        
+        // Ambil indeks kolom dari cell yang diklik
+        const cellIndex = targetCell.cellIndex; // 0: No, 1: Nama, 2: Sakit, 3: Izin, 4: Alpa
+        if (cellIndex === 1) {  // Hanya jika yang diklik adalah kolom NAMA
+            const row = targetCell.parentElement; // <tr>
+            highlightRow(row);
+        }
+    }
 
     // Render tabel (dengan atau tanpa filter)
     function renderTable(filteredArray = null) {
@@ -339,9 +410,14 @@
             cellAlpa.textContent = s.alpa;
             cellAlpa.className = 'number-cell alpa';
         }
+        
+        // Setelah render ulang, highlight harus di-reset (karena DOM baru)
+        currentSelectedRow = null;
+        // Pasang ulang event listener (meskipun sudah terpasang, pastikan tetap bekerja)
+        attachRowClickHandler();
     }
 
-    // Filter nama
+    // Filter nama (dengan mempertahankan perilaku)
     function handleFilter() {
         const keyword = searchInput.value.trim().toLowerCase();
         if (keyword === "") {
@@ -350,16 +426,31 @@
         }
         const filtered = studentsData.filter(s => s.nama.toLowerCase().includes(keyword));
         renderTable(filtered);
+        // setelah filter, hilangkan highlight karena data berubah
+        clearHighlight();
     }
-
-    // event listener pencarian
+    
+    // Saat pencarian selesai, pastikan highlight dihapus
     if (searchInput) {
-        searchInput.addEventListener('input', handleFilter);
-        searchInput.addEventListener('search', handleFilter);
+        searchInput.addEventListener('input', () => {
+            handleFilter();
+            clearHighlight();  // ekstra aman
+        });
+        searchInput.addEventListener('search', () => {
+            handleFilter();
+            clearHighlight();
+        });
     }
 
-    // Render awal
+    // Inisialisasi awal
     renderTable();
+    
+    // Tambahkan instruksi: pada HP atau desktop, geser tabel bebas
+    // Pastikan wrapper bisa discroll dengan baik
+    const tableWrapper = document.getElementById('tableWrapper');
+    if (tableWrapper) {
+        // tidak perlu modifikasi lebih lanjut, overflow auto sudah berfungsi
+    }
 </script>
 </body>
 </html>
