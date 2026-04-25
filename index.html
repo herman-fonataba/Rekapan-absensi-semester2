@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Rekapan Kehadiran Semester 2 - Sakit, Izin, Alpa</title>
+    <title>Rekapan Kehadiran Semester 2 | Sakit · Izin · Alpa</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Body TIDAK BISA SCROLL, hanya tabel yang scroll */
+        /* ----- GLOBAL: body tidak ikut scroll (hanya tabel yang scroll) ----- */
         html, body {
             height: 100%;
             overflow: hidden;
@@ -20,10 +20,9 @@
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', sans-serif;
             background: #eef2f7;
-            color: #1a2c3e;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            padding: 8px;
         }
 
         /* container utama */
@@ -31,7 +30,7 @@
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
@@ -39,12 +38,11 @@
             overflow: hidden;
         }
 
-        /* HEADER */
+        /* HEADER - selalu tetap di atas */
         h1 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            padding: 16px 16px 10px 16px;
-            margin: 0;
+            padding: 20px 24px 12px 24px;
             background: white;
             border-bottom: 1px solid #e9edf2;
             flex-shrink: 0;
@@ -52,7 +50,7 @@
 
         /* search bar */
         .search-bar {
-            padding: 10px 12px;
+            padding: 12px 24px;
             background: white;
             border-bottom: 1px solid #eef2f6;
             flex-shrink: 0;
@@ -60,11 +58,12 @@
 
         .search-bar input {
             width: 100%;
-            padding: 10px 14px;
+            max-width: 360px;
+            padding: 10px 18px;
             font-size: 0.9rem;
-            border: 1px solid #cddfe8;
+            border: 1px solid #cbdde6;
             border-radius: 44px;
-            background: #ffffff;
+            background: white;
             transition: 0.2s;
             outline: none;
             font-family: inherit;
@@ -75,25 +74,22 @@
             box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
         }
 
-        /* indikator geser untuk HP */
-        .swipe-indicator {
+        /* indikator geser HANYA muncul di HP (media query) */
+        .swipe-hint {
+            display: none;
             text-align: center;
             font-size: 0.7rem;
-            color: #f5a623;
-            background: #fff8e7;
+            background: #fffbee;
+            color: #b45f06;
             padding: 6px 12px;
             border-bottom: 1px solid #ffe0b3;
             flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 8px;
-        }
-        .swipe-indicator span {
-            font-size: 1rem;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* HANYA TABEL WRAPPER YANG BISA SCROLL (VERTIKAL & HORIZONTAL) */
+        /* WRAPPER TABEL: satu-satunya area yang bisa scroll (vertical & horizontal) */
         .table-wrapper {
             flex: 1;
             overflow: auto;
@@ -102,56 +98,53 @@
             scroll-behavior: smooth;
         }
 
-        /* TABEL - lebar cukup untuk menampung semua kolom di HP dengan nyaman */
+        /* TABEL */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
-            min-width: 550px;
+            font-size: 0.85rem;
+            /* minimal width agar di HP tetap bisa digeser horizontal */
+            min-width: 600px;
         }
 
-        /* Sticky header */
+        /* sticky header */
         thead th {
             position: sticky;
             top: 0;
             background: #f2f6fc;
             color: #1a4d6b;
             font-weight: 700;
-            padding: 12px 6px;
-            font-size: 0.8rem;
+            padding: 14px 10px;
             text-align: center;
-            border-bottom: 2px solid #dce5ec;
+            border-bottom: 2px solid #d4e2ec;
             z-index: 12;
             white-space: nowrap;
         }
 
         td {
-            padding: 10px 6px;
+            padding: 12px 10px;
             border-bottom: 1px solid #ecf3f8;
             text-align: center;
             vertical-align: middle;
-            font-size: 0.8rem;
-            transition: background-color 0.2s ease;
+            transition: background 0.15s ease;
         }
 
-        /* Kolom NAMA rata kiri - bisa diklik */
+        /* kolom NAMA: rata kiri, bisa diklik */
         td:nth-child(2) {
             text-align: left;
             font-weight: 500;
             color: #0f3b5c;
-            background-color: #fefefe;
+            cursor: pointer;
             word-break: break-word;
             white-space: normal;
-            min-width: 140px;
-            cursor: pointer;
         }
 
         td:nth-child(2):hover {
-            background-color: #e6f0fa !important;
+            background-color: #eaf3fc;
             text-decoration: underline;
         }
 
-        /* kelas untuk baris yang dipilih */
+        /* highlight baris yang dipilih (klik nama) */
         .row-selected td {
             background-color: #fff2db !important;
             border-left: 3px solid #f5a623;
@@ -163,117 +156,109 @@
             font-weight: 700;
         }
 
-        td:first-child, th:first-child {
-            padding-left: 10px;
-            text-align: center;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        /* Gaya angka Sakit, Izin, Alpa - jelas dan warna berbeda */
+        /* gaya angka Sakit, Izin, Alpa */
         .number-cell {
             font-family: 'SF Mono', 'Courier New', monospace;
             font-weight: 700;
             font-size: 0.9rem;
-        }
-        .sakit { 
-            color: #2b6e2b; 
-            background-color: #f0f9f0;
-            border-radius: 20px;
             display: inline-block;
-            min-width: 32px;
-            padding: 2px 4px;
+            min-width: 36px;
+            padding: 2px 6px;
+            border-radius: 24px;
         }
-        .izin { 
-            color: #e68a2e; 
-            font-weight: 700;
-            background-color: #fff4e6;
-            border-radius: 20px;
-            display: inline-block;
-            min-width: 32px;
-            padding: 2px 4px;
+        .sakit {
+            color: #1f6e1f;
+            background-color: #e9f7e9;
         }
-        .alpa { 
-            color: #c72a2a; 
-            font-weight: 700;
+        .izin {
+            color: #c45c0c;
+            background-color: #fff0e0;
+        }
+        .alpa {
+            color: #bc2c2c;
             background-color: #ffe6e6;
-            border-radius: 20px;
-            display: inline-block;
-            min-width: 32px;
-            padding: 2px 4px;
         }
 
-        /* agar sel angka lebih rapi */
-        td:nth-child(3), td:nth-child(4), td:nth-child(5) {
-            text-align: center;
-        }
-
-        tr:hover td {
-            background-color: #fafdff;
-        }
-
-        /* footer */
+        /* footer small */
         .bottom-note {
             text-align: center;
-            font-size: 0.65rem;
-            color: #8ba3bc;
-            padding: 8px 12px;
+            font-size: 0.7rem;
+            color: #6f8eaa;
+            padding: 10px 16px;
             border-top: 1px solid #eef2f6;
             background: #ffffff;
             flex-shrink: 0;
         }
 
-        /* HP khusus - tampilan lebih nyaman */
-        @media (max-width: 640px) {
+        /* ============================================= */
+        /* RESPONSIVE: HP (max-width: 700px) */
+        /* ============================================= */
+        @media (max-width: 700px) {
             body {
                 padding: 6px;
             }
             h1 {
                 font-size: 1.2rem;
-                padding: 12px 14px 8px 14px;
+                padding: 14px 16px 8px 16px;
+            }
+            .search-bar {
+                padding: 8px 12px;
             }
             .search-bar input {
-                padding: 8px 12px;
                 font-size: 0.85rem;
+                padding: 8px 14px;
+                max-width: 100%;
+            }
+            /* tampilkan hint geser (hanya di hp) */
+            .swipe-hint {
+                display: flex;
             }
             thead th {
-                padding: 8px 4px;
+                padding: 8px 6px;
                 font-size: 0.7rem;
             }
             td {
-                padding: 8px 4px;
+                padding: 8px 5px;
                 font-size: 0.72rem;
             }
             td:nth-child(2) {
-                min-width: 120px;
-                font-size: 0.75rem;
+                min-width: 130px;
+                font-size: 0.74rem;
             }
             .number-cell {
-                font-size: 0.8rem;
+                font-size: 0.78rem;
+                min-width: 28px;
+                padding: 2px 4px;
             }
-            .swipe-indicator {
-                font-size: 0.65rem;
-                padding: 4px 8px;
+            .bottom-note {
+                font-size: 0.6rem;
+                padding: 6px 8px;
             }
         }
 
-        /* Laptop & desktop lebih lega */
-        @media (min-width: 1024px) {
-            body {
-                padding: 20px;
+        /* LAPTOP / KOMPUTER: tampilan lebih lega, tanpa hint geser */
+        @media (min-width: 701px) {
+            .table-wrapper {
+                overflow: auto; /* tetap bisa geser jika diperlukan, tapi karena tabel lebar otomatis jarang perlu */
+            }
+            table {
+                min-width: auto; /* tidak dipaksa minimal width, biar mengikuti konten */
+            }
+            td, th {
+                padding: 14px 14px;
             }
             h1 {
                 font-size: 1.9rem;
-                padding: 24px 28px 12px 28px;
+                padding: 24px 32px 12px 32px;
             }
             .search-bar {
-                padding: 12px 28px;
+                padding: 12px 32px;
             }
             .search-bar input {
-                width: 340px;
+                width: 320px;
             }
-            td, th {
-                padding: 14px 12px;
+            .bottom-note {
+                padding: 12px 24px;
             }
         }
     </style>
@@ -284,16 +269,16 @@
         📋 Rekapan Kehadiran Semester 2
     </h1>
 
-    <!-- indikator untuk HP: beri tahu bisa digeser -->
-    <div class="swipe-indicator">
-        <span>👉</span> Geser tabel ke kanan/kiri untuk lihat Sakit, Izin, Alpa <span>👈</span>
+    <!-- hint khusus HP: memberi tahu user bisa geser -->
+    <div class="swipe-hint">
+        👉 Geser tabel ke kanan/kiri untuk melihat Sakit · Izin · Alpa 👈
     </div>
 
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="🔍 Cari nama siswa ..." aria-label="Cari nama siswa">
+        <input type="text" id="searchInput" placeholder="🔍 Cari nama siswa (ketik nama ...)" aria-label="Cari siswa">
     </div>
 
-    <!-- HANYA AREA INI YANG BISA DISCROLL -->
+    <!-- HANYA AREA TABEL YANG BISA DISCROLL (baik di HP maupun laptop) -->
     <div class="table-wrapper" id="tableWrapper">
         <table id="attendanceTable">
             <thead>
@@ -306,17 +291,17 @@
                 </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <!-- data via javascript -->
+                    <!-- isi via JS -->
                 </tbody>
         </table>
     </div>
     <div class="bottom-note">
-        ↕️ Geser vertikal • Klik nama untuk memberi tanda
+        ⚡ Klik nama siswa untuk memberi tanda warna • Geser bebas (vertikal/horizontal)
     </div>
 </div>
 
 <script>
-    // Data (Sakit diambil dari kolom Sekat sebelumnya)
+    // Data dari excel (sekat diganti menjadi sakit)
     const studentsData = [
         { no:1, nama:"ALDRIAN RONALSON TITIHERU", sakit:0, izin:2, alpa:0 },
         { no:2, nama:"Alfian Adi Purnomo", sakit:0, izin:0, alpa:3 },
@@ -377,17 +362,10 @@
         }
     }
 
-    function attachRowClickHandler() {
-        const table = document.getElementById('attendanceTable');
-        if (!table) return;
-        table.removeEventListener('click', tableClickHandler);
-        table.addEventListener('click', tableClickHandler);
-    }
-
-    function tableClickHandler(event) {
+    function handleRowClick(event) {
         let target = event.target;
         let targetCell = null;
-        while (target && target !== this) {
+        while (target && target !== event.currentTarget) {
             if (target.tagName === 'TD') {
                 targetCell = target;
                 break;
@@ -395,10 +373,17 @@
             target = target.parentElement;
         }
         if (!targetCell) return;
-        const cellIndex = targetCell.cellIndex;
-        if (cellIndex === 1) {
+        if (targetCell.cellIndex === 1) { // kolom NAMA (index 1)
             const row = targetCell.parentElement;
             highlightRow(row);
+        }
+    }
+
+    function attachTableEvents() {
+        const table = document.getElementById('attendanceTable');
+        if (table) {
+            table.removeEventListener('click', handleRowClick);
+            table.addEventListener('click', handleRowClick);
         }
     }
 
@@ -406,33 +391,34 @@
         if (!tbody) return;
         const dataSource = filteredArray !== null ? filteredArray : studentsData;
         tbody.innerHTML = '';
-        
+
         for (let i = 0; i < dataSource.length; i++) {
             const s = dataSource[i];
             const row = tbody.insertRow();
-            
+
             const cellNo = row.insertCell(0);
             cellNo.textContent = s.no;
             cellNo.style.fontWeight = '500';
-            
+
             const cellName = row.insertCell(1);
             cellName.textContent = s.nama;
-            
+
             const cellSakit = row.insertCell(2);
             cellSakit.innerHTML = `<span class="number-cell sakit">${s.sakit}</span>`;
-            
+
             const cellIzin = row.insertCell(3);
             cellIzin.innerHTML = `<span class="number-cell izin">${s.izin}</span>`;
-            
+
             const cellAlpa = row.insertCell(4);
             cellAlpa.innerHTML = `<span class="number-cell alpa">${s.alpa}</span>`;
         }
-        
+
+        // reset highlight setelah render
         currentSelectedRow = null;
-        attachRowClickHandler();
+        attachTableEvents();
     }
 
-    function handleFilter() {
+    function filterTable() {
         const keyword = searchInput.value.trim().toLowerCase();
         if (keyword === "") {
             renderTable();
@@ -443,10 +429,8 @@
         clearHighlight();
     }
 
-    if (searchInput) {
-        searchInput.addEventListener('input', handleFilter);
-        searchInput.addEventListener('search', handleFilter);
-    }
+    searchInput.addEventListener('input', filterTable);
+    searchInput.addEventListener('search', filterTable);
 
     renderTable();
 </script>
